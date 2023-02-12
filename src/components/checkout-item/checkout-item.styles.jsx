@@ -23,7 +23,7 @@ export const BaseSpan = styled.span`
   width: 23%;
 `;
 
-export const Quantity = styled.div`
+export const Quantity = styled(BaseSpan)`
   display: flex;
 `;
 
