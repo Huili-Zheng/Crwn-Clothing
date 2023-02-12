@@ -1,5 +1,5 @@
-import { createContext, useEffect, useReducer } from "react";
-
+import { createContext, useReducer } from "react";
+import { createAction } from "../utils/reducer/reducer.utils";
 const addCartItem = (cartItems, productToAdd) => {
   const existingCartItem = cartItems.find(
     (cartItem) => cartItem.id === productToAdd.id
@@ -40,57 +40,38 @@ export const CartContext = createContext({
   isCartOpen: false,
   setIsCartOpen: () => {},
   cartItems: [],
-  cardCount: 0,
-  total: 0,
+  cartCount: 0,
+  cartTotal: 0,
   addItemToCart: () => {},
   delItemFromCart: () => {},
   clearItemFromCart: () => {},
 });
 
 export const CART_ACTION_TYPES = {
-  ADD_ITEM: "ADD_ITEM",
-  DEL_ITEM: "DEL_ITEM",
-  CLEAR_ITEM: "CLEAR_ITEM",
-  TOGGLE_CART: "TOGGLE_CART",
+  SET_CART_ITEMS: "SET_CART_ITEMS",
+  SET_IS_CART_OPEN: "SET_IS_CART_OPEN",
 };
 
 const INITIAL_STATE = {
   cartItems: [],
   isCartOpen: false,
-  cardCount: 0,
-  total: 0,
+  cartCount: 0,
+  cartTotal: 0,
 };
 
 const cartReducer = (state, action) => {
   const { type, payload } = action;
-  const { cartItems, cardCount, total, isCartOpen } = state;
 
   switch (type) {
-    case "ADD_ITEM":
+    case "SET_CART_ITEMS":
       return {
         ...state,
-        cardCount: cardCount + 1,
-        total: total + payload.price,
-        cartItems: addCartItem(cartItems, payload),
+        ...payload,
       };
-    case "DEL_ITEM":
+    case "SET_IS_CART_OPEN":
       return {
         ...state,
-        cardCount: cardCount - 1,
-        total: total - payload.price,
-        cartItems: delCartItem(cartItems, payload),
-      };
-    case "CLEAR_ITEM":
-      return {
-        ...state,
-        cardCount: 0,
-        total: total - payload.quantity * payload.price,
-        cartItems: clearCartItem(cartItems, payload),
-      };
-    case "TOGGLE_CART":
-      return {
-        ...state,
-        isCartOpen: !payload,
+        isCartOpen: payload,
       };
     default:
       throw new Error(`Unhandled type ${type} in userReducer`);
@@ -99,33 +80,54 @@ const cartReducer = (state, action) => {
 
 export const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, INITIAL_STATE);
-  const { cartItems, cardCount, total, isCartOpen } = state;
+  const { cartItems, cartCount, cartTotal, isCartOpen } = state;
+
+  const updateCartItemsReducer = (newCartItems) => {
+    const newCartCount = newCartItems.reduce(
+      (total, cartItem) => total + cartItem.quantity,
+      0
+    );
+    const newCartTotal = newCartItems.reduce(
+      (total, cartItem) => total + cartItem.quantity * cartItem.price,
+      0
+    );
+    dispatch(
+      createAction(CART_ACTION_TYPES.SET_CART_ITEMS, {
+        cartItems: newCartItems,
+        cartTotal: newCartTotal,
+        cartCount: newCartCount,
+      })
+    );
+  };
 
   const addItemToCart = (productToAdd) => {
-    dispatch({ type: CART_ACTION_TYPES.ADD_ITEM, payload: productToAdd });
+    const newCartItems = addCartItem(cartItems, productToAdd);
+    updateCartItemsReducer(newCartItems);
   };
 
   const delItemFromCart = (productToDel) => {
-    dispatch({ type: CART_ACTION_TYPES.DEL_ITEM, payload: productToDel });
+    const newCartItems = delCartItem(cartItems, productToDel);
+    updateCartItemsReducer(newCartItems);
   };
 
   const clearItemFromCart = (productToClear) => {
-    dispatch({ type: CART_ACTION_TYPES.CLEAR_ITEM, payload: productToClear });
+    const newCartItems = clearCartItem(cartItems, productToClear);
+    updateCartItemsReducer(newCartItems);
   };
 
-  const toggleIsCartOpen = () => {
-    dispatch({ type: CART_ACTION_TYPES.TOGGLE_CART, payload: isCartOpen });
+  const setIsCartOpen = (bool) => {
+    dispatch(createAction(CART_ACTION_TYPES.SET_IS_CART_OPEN, bool));
   };
 
   const value = {
     isCartOpen,
-    toggleIsCartOpen,
+    setIsCartOpen,
     addItemToCart,
     delItemFromCart,
     clearItemFromCart,
     cartItems,
-    cardCount,
-    total,
+    cartCount,
+    cartTotal,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
