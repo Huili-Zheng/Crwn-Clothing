@@ -107,7 +107,7 @@ export const createUserDocumentFromAuth = async (
       console.log("erroe creating the user", error.message);
     }
   }
-  return userDocRef;
+  return userSnapshot;
 };
 
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
@@ -117,7 +117,9 @@ export const createAuthUserWithEmailAndPassword = async (email, password) => {
 };
 
 export const signInAuthUserWithEmailAndPassword = async (email, password) => {
-  if (!email || !password) return;
+  if (!email || !password) {
+    throw new Error("Email and password are required.");
+  }
 
   return await signInWithEmailAndPassword(auth, email, password);
 };
@@ -129,10 +131,10 @@ export const onAuthStateChangedListener = (callback) =>
 
 export const getCurrentUser = () => {
   return new Promise((resolve, reject) => {
-    const unsubcribe = onAuthStateChanged(
+    const unsubscribe = onAuthStateChanged(
       auth,
       (userAuth) => {
-        unsubcribe();
+        unsubscribe();
         resolve(userAuth);
       },
       reject
