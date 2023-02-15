@@ -6,6 +6,7 @@ import { setCurrentUser } from "./store/user/user.action";
 import {
   onAuthStateChangedListener,
   createUserDocumentFromAuth,
+  getCurrentUser,
 } from "./utils/firebase/firebase.utils";
 
 import Home from "./routes/home/home.component";
@@ -18,14 +19,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const unsubcribe = onAuthStateChangedListener((user) => {
-      if (user) {
-        createUserDocumentFromAuth(user);
-      }
-      dispatch(setCurrentUser(user));
-    });
-
-    return unsubcribe;
+    getCurrentUser();
   }, []);
 
   return (
