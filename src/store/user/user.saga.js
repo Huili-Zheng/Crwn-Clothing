@@ -19,7 +19,6 @@ import {
   createAuthUserWithEmailAndPassword,
   signOutUser,
 } from "../../utils/firebase/firebase.utils";
-import { useFormAction } from "react-router-dom";
 
 export function* getSnapshotFromUserAuth(userAuth, additionalDetails) {
   try {
