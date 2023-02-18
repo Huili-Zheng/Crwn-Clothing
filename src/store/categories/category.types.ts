@@ -1,5 +1,3 @@
-import { StringLike } from "@firebase/util";
-
 export enum CATEGORIES_ACTION_TYPES {
   FETCH_CATEGORIES_START = "category/FETCH_CATEGORIES_START",
   FETCH_CATEGORIES_SUCCESS = "category/FETCH_CATEGORIES_SUCCESS",
@@ -8,7 +6,7 @@ export enum CATEGORIES_ACTION_TYPES {
 
 export type CategoryItem = {
   id: number;
-  mageUrl: string;
+  imageUrl: string;
   name: string;
   price: number;
 };
@@ -21,4 +19,10 @@ export type Category = {
 
 export type CategoryMap = {
   [key: string]: CategoryItem[];
+};
+
+export type CategoryDescription = {
+  title: string;
+  id: number;
+  imageUrl: string;
 };
