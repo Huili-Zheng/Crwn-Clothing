@@ -4,8 +4,10 @@ import { CategoriesState } from "./category.reducer";
 
 import { CategoryMap } from "./category.types";
 
+import { RootState } from "../store";
+
 //  selector that selects the categories slice of the state from the store
-const selectCategoryReducer = (state): CategoriesState => {
+const selectCategoryReducer = (state: RootState): CategoriesState => {
   return state.categories;
 };
 
