@@ -97,12 +97,12 @@ export const getCategoryDescriptionAndDocuments = async () => {
 };
 
 export type AdditionalInformation = {
-  displayname?: string;
+  displayName?: string;
 };
 
 export type UserData = {
   createdAt: Date;
-  displayname: string;
+  displayName: string;
   email: string;
 };
 
