@@ -3,8 +3,12 @@ import { DirectoryContainer } from "./directory.styles";
 import { Fragment, useEffect, useState } from "react";
 import { getCategoryDescriptionAndDocuments } from "../../utils/firebase/firebase.utils";
 
+import { CategoryDescription } from "../../store/categories/category.types";
+
+export type CategoryDescriptionMap = Record<string, CategoryDescription[]>;
 const Directory = () => {
-  const [categoryDescriptionMap, setCategoryDescriptionMap] = useState({});
+  const [categoryDescriptionMap, setCategoryDescriptionMap] =
+    useState<CategoryDescriptionMap>({});
 
   useEffect(() => {
     const getCategoryDescriptionMap = async () => {
@@ -21,7 +25,7 @@ const Directory = () => {
       {Object.keys(categoryDescriptionMap).map((title) => {
         console.log(categoryDescriptionMap[title]);
         return (
-          <Fragment>
+          <Fragment key={title}>
             {categoryDescriptionMap[title].map((category) => (
               <DirectoryItem key={category.id} category={category} />
             ))}
