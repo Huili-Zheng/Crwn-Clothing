@@ -1,8 +1,12 @@
 import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 
 import { useDispatch, useSelector } from "react-redux";
+import { FC } from "react";
+
 import { addItemToCart } from "../../store/cart/cart.action";
 import { selectCartItems } from "../../store/cart/cart.selector";
+import { CategoryItem as Product } from "../../store/categories/category.types";
+
 import {
   Footer,
   Name,
@@ -10,7 +14,11 @@ import {
   ProductCardContainer,
 } from "./product-card.styles";
 
-const ProductCard = ({ product }) => {
+export type ProductCardProps = {
+  product: Product;
+};
+
+const ProductCard: FC<ProductCardProps> = ({ product }) => {
   const { name, price, imageUrl } = product;
   const dispatch = useDispatch();
 
