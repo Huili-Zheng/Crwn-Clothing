@@ -7,16 +7,19 @@ import {
 
 import { FC } from "react";
 
-import { Category } from "../../store/categories/category.types";
+import { CategoryItem } from "../../store/categories/category.types";
 
-export type CategoryPreviewProps = Category;
+export type CategoryPreviewProps = {
+  title: string;
+  products: CategoryItem[];
+};
 
-const CategoryPreview: FC<CategoryPreviewProps> = ({ title, items }) => {
+const CategoryPreview: FC<CategoryPreviewProps> = ({ title, products }) => {
   return (
     <CategiryPreviewContainer>
       <Title to={title}>{title.toUpperCase()}</Title>
       <Preview>
-        {items
+        {products
           .filter((_, idx) => idx < 4)
           .map((product) => (
             <ProductCard key={product.id} product={product} />
