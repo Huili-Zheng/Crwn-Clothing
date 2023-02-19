@@ -14,10 +14,12 @@ const Directory = () => {
     };
     getCategoryDescriptionMap();
   }, []);
+  console.log(categoryDescriptionMap);
 
   return (
     <DirectoryContainer>
       {Object.keys(categoryDescriptionMap).map((title) => {
+        console.log(categoryDescriptionMap[title]);
         return (
           <Fragment>
             {categoryDescriptionMap[title].map((category) => (

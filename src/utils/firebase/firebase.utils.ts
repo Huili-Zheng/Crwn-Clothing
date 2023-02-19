@@ -80,24 +80,20 @@ export const getCategoriesAndDocuments = async (): Promise<Category[]> => {
   );
 };
 
-export const getCategoryDescriptionAndDocuments = async (): Promise<
-  CategoryDescription[]
-> => {
+export const getCategoryDescriptionAndDocuments = async () => {
   const categoryDescriptionRef = collection(db, "categoryDescription");
   const q = query(categoryDescriptionRef);
 
   const querySnapshot = await getDocs(q);
-  const categoryDescriptions: CategoryDescription[] = [];
-  querySnapshot.forEach((docSnapshot) => {
-    const data = docSnapshot.data();
-    const { id, title, imageUrl } = data;
-    if (!id || !title || !imageUrl) {
-      throw new Error("Invalid document data: " + JSON.stringify(data));
-    }
-    categoryDescriptions.push({ id, title, imageUrl });
-  });
-
-  return categoryDescriptions;
+  const categoryDescriptionMap = querySnapshot.docs.reduce(
+    (acc, docSnapshot) => {
+      const { title, id, imageUrl } = docSnapshot.data();
+      acc[title.toLowerCase()] = [{ id, title, imageUrl }];
+      return acc;
+    },
+    {} as Record<string, CategoryDescription[]>
+  );
+  return categoryDescriptionMap;
 };
 
 export type AdditionalInformation = {
