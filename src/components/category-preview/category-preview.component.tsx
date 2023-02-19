@@ -5,12 +5,18 @@ import {
   Preview,
 } from "./category-preview.styles";
 
-const CategoryPreview = ({ title, products }) => {
+import { FC } from "react";
+
+import { Category } from "../../store/categories/category.types";
+
+export type CategoryPreviewProps = Category;
+
+const CategoryPreview: FC<CategoryPreviewProps> = ({ title, items }) => {
   return (
     <CategiryPreviewContainer>
       <Title to={title}>{title.toUpperCase()}</Title>
       <Preview>
-        {products
+        {items
           .filter((_, idx) => idx < 4)
           .map((product) => (
             <ProductCard key={product.id} product={product} />
