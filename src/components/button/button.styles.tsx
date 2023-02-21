@@ -19,10 +19,18 @@ export const BaseButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+
   &:hover {
     background-color: white;
     color: black;
     border: 1px solid black;
+  }
+
+  @media screen and (max-width: 800px) {
+    display: block;
+    opacity: 0.9;
+    min-width: unset;
+    padding: 0 10px;
   }
 `;
 
